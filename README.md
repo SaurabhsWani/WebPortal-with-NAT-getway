@@ -1,11 +1,5 @@
 # WebPortal-with-NAT-getway
 
-Launching web portal including WordPress and MySql for a company with the security using bostion host
-
-For launching the web portal requirements are, launch an EC2 instance which has WordPress software with dedicated database server which has WordPress setup already having the security group allowing port 80 in public subnet so that our client can connect to our WordPress site and only bostion host os can connect to it using SSH. Launch an EC2 instance which has MySql setup with security group allowing port 3306 in private subnet so that our wordpress os can connect and only bostion host os can connect to it using SSH. Launch an EC2 instance called as bostion host which can connect to MySql instance using SSH and also to WordPress instance.
-
-Security: Launch new VPC with 2 subnets Public subnet (Accessible for Public World!) and Private subnet (Restricted for Public World!). WordPress instance has to be part of public subnet so that our client can connect our site. MySql instance has to be part of private subnet so that outside world can't connect to it. Bostion host has to be part of the public network so it can connect to the WordPress and MySql instance. Need to update routing table of VPC so public subnet can connect to outside world. Create a Internet gateway so that instance can connect to outside world and update routing table associate it with public subnet. Attach the single key pair to all instances for further login.
-
 Starting Setup:
 
 1) Aws root/IAM(with all power) account Access key id and Secret Access key.
@@ -21,8 +15,6 @@ Paste both .exe file in your environment variable path or create new environment
     "see Environmet_variable image"
 
 Creat a new folder or directory where you want and save all the below file in that folder/directory as shown above.
-
-Terraform: Terraform is a very intelligent code, it can interact with any of the cloud the only thing we have to provide is provider (ex. aws, gcp), some specification of services which we are going to use etc. Read more about terraform
 
 Note: Before going to run any terraform file, first run the command "terraform init", after running this command terraform will download all plugin require for your code. As shown in image
 
@@ -41,9 +33,7 @@ Now here starts the main practical
 To create the VPC here is code. You can change the cidr_block, assign ip range as you want, you can assign the range from there ip range
 
 1) 10.0.0.0 – 10.255.255.255
-
 2) 172.16.0.0 – 172.31.255.255
-
 3) 192.168.0.0 – 192.168.255.255
 
 
@@ -124,13 +114,7 @@ Attaching the routing table to public subnet
          route_table_id = aws_vpc.sswvpc.default_route_table_id
     }
     
-    
-   attaching one NAT getway (Network Address Translator ) to the public subnet and update the routing table for private instance so the instance can go out for connecting to internet.The best part of the NAT getway is  it don't allow the os which is outside of the VPC to connect the instance in private subnet, this is because of the SNAT ( Source Network Address Translator).
-
-SNAT means the NAT getway is become a intermediate between the private subnet's instance and the public world os/pc and whenever the public os try to connect to private instance it dosen't allow , it is like it says i am the only one who can connect to the private instance.
-
-For creating the NAT getway we need to assign the EIP(Elastic IP) or static public IP to the NAT getway for internet connectivity and then need to update the routing table or create new routing table which have rout rule for the connecting to any ip using NAT getway which will be associating with private subnet.
-
+      
 Creating NAT getway with EIP, routing table, and associating it with subnet 2
     
         //creating EIP
